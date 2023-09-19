@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#80000000">
+
+    <LinearLayout
+        android:id="@+id/addTaskLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Task Title -->
+        <EditText
+            android:id="@+id/eTTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Task Title"
+            android:inputType="text"
+            android:imeOptions="actionNext"
+            android:importantForAccessibility="yes"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
+        <!-- Task Description -->
+        <EditText
+            android:id="@+id/eTDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Task Description"
+            android:inputType="text"
+            android:imeOptions="actionNext"
+            android:importantForAccessibility="yes"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
+        <!-- Task Due Date -->
+        <EditText
+            android:id="@+id/eTDueDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Due Date"
+            android:inputType="text"
+            android:imeOptions="actionNext"
+            android:importantForAccessibility="yes"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
+        <!-- Task Priority -->
+        <EditText
+            android:id="@+id/eTPriority"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Priority"
+            android:inputType="text"
+            android:imeOptions="actionNext"
+            android:importantForAccessibility="yes"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
+        <!-- Task Category -->
+        <EditText
+            android:id="@+id/eTCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Category"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:importantForAccessibility="yes"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
+
+        <Button
+            android:id="@+id/buttonSaveTask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="Save" />
+
+    </LinearLayout>
+
+</RelativeLayout>
