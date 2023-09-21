@@ -1,5 +1,6 @@
 package com.mullatoes.todoapp
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mullatoes.todoapp.model.Task
 
 class MyRecyclerAdapter(
-    private val tasks: MutableList<Task>
+    private var tasks: List<Task>
 ) : RecyclerView.Adapter<MyViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -24,10 +25,16 @@ class MyRecyclerAdapter(
         val task = tasks[position]
         holder.bind(task)
     }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateTasks(newTasks: List<Task>) {
+        tasks = newTasks
+        notifyDataSetChanged()
+    }
 }
 
 class MyViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-    //title, vategory, due date, priority, description,
+
     fun bind(task: Task) {
         title.text = task.title
         description.text = task.description

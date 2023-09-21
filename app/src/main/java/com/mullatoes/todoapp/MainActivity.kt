@@ -10,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
@@ -60,10 +62,14 @@ class MainActivity : AppCompatActivity() {
     )
 
 
+    private lateinit var adapter: MyRecyclerAdapter
+
     @SuppressLint("NotifyDataSetChanged", "ServiceCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+        adapter = MyRecyclerAdapter(taskList)
 
         binding.recyclerView.apply {
             setBackgroundColor(Color.YELLOW)
@@ -75,11 +81,53 @@ class MainActivity : AppCompatActivity() {
             launchAddItemDialog()
         }
 
+        val priorityLevels = arrayOf("All", "High", "Medium", "Low")
+
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item, priorityLevels
+        )
+
+        adapter.setDropDownViewResource(
+            android.R.layout.simple_spinner_dropdown_item
+        )
+
+        binding.spinnerPriorityFilter.adapter = adapter
+
+        binding.spinnerPriorityFilter.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parentView: AdapterView<*>?,
+                    selectedItemView: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    val selectedPriority = priorityLevels[position]
+                    filterTasksByPriority(selectedPriority)
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                    // Do nothing if nothing is selected
+                }
+
+            }
+
+    }
+
+    private fun filterTasksByPriority(selectedPriority: String) {
+
+        val filteredTasks = if (selectedPriority == "All") {
+            taskList
+        } else {
+            taskList.filter { it.priority == selectedPriority }
+        }
+
+        adapter.updateTasks(filteredTasks)
+
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun launchAddItemDialog() {
-        // Create a dialog with the custom layout
         val dialogView = layoutInflater.inflate(R.layout.add_item_dialog, null)
         val builder = AlertDialog.Builder(this)
         builder.setView(dialogView)
