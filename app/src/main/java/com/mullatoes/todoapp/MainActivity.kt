@@ -9,14 +9,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mullatoes.todoapp.databinding.ActivityMainBinding
 import com.mullatoes.todoapp.model.Task
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var taskTitleEditText: EditText
+    private lateinit var taskDescriptionEditText: EditText
+    private lateinit var taskPriorityEditText: EditText
+    private lateinit var taskDueDateEditText: EditText
+    private lateinit var taskCategoryEditText: EditText
 
     private lateinit var binding: ActivityMainBinding
 
@@ -52,7 +60,7 @@ class MainActivity : AppCompatActivity() {
     )
 
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged", "ServiceCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -63,65 +71,49 @@ class MainActivity : AppCompatActivity() {
             adapter = MyRecyclerAdapter(taskList)
         }
 
-//        binding.floatingActionButton.setOnClickListener {
-//            println("FAB Clicked! ${taskList.size}")
-//            // val newTask = "Swimming"
-//            val task = Task(
-//                6,
-//                "Meeting with Client",
-//                "Discuss project details with the client.",
-//                "High",
-//                "2023-09-24",
-//                "Work"
-//            )
-//
-//            addTask(task)
-//
-//            println("FAB Clicked After Adding! ${taskList.size}")
-//            println("Task title: ${task.title}")
-//        }
-
-        val overlayLayout = LayoutInflater.from(this)
-            .inflate(R.layout.add_task_overlay, null)
-
-        val addTaskLayout = overlayLayout.findViewById<View>(R.id.addTaskLayout)
-        val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val layoutParams = WindowManager.LayoutParams(
-            WindowManager.LayoutParams.MATCH_PARENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.TYPE_APPLICATION_PANEL,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-            PixelFormat.TRANSLUCENT
-        )
-
         binding.floatingActionButton.setOnClickListener {
-            windowManager.addView(overlayLayout, layoutParams)
+            launchAddItemDialog()
         }
 
-        val saveButton = overlayLayout.findViewById<Button>(R.id.buttonSaveTask)
-        val taskTitleEditText = overlayLayout.findViewById<EditText>(R.id.eTTitle)
-        val taskDescriptionEditText = overlayLayout.findViewById<EditText>(R.id.eTDescription)
-        val taskPriorityEditText = overlayLayout.findViewById<EditText>(R.id.eTPriority)
-        val taskDueDateEditText = overlayLayout.findViewById<EditText>(R.id.eTDueDate)
-        val taskCategoryEditText = overlayLayout.findViewById<EditText>(R.id.eTCategory)
+    }
 
-        saveButton.setOnClickListener {
+    @SuppressLint("NotifyDataSetChanged")
+    private fun launchAddItemDialog() {
+        // Create a dialog with the custom layout
+        val dialogView = layoutInflater.inflate(R.layout.add_item_dialog, null)
+        val builder = AlertDialog.Builder(this)
+        builder.setView(dialogView)
+            .setTitle("Enter Task Details")
+            .setPositiveButton("Save") { dialog, which ->
 
-            val taskTitle = taskTitleEditText.text.toString()
-            val taskDescription = taskDescriptionEditText.text.toString()
-            val priority = taskPriorityEditText.text.toString()
-            val dueDate = taskDueDateEditText.text.toString()
-            val category = taskCategoryEditText.text.toString()
+                val taskTitleEditText = dialogView.findViewById<EditText>(R.id.editTextTitle)
+                val taskDescriptionEditText =
+                    dialogView.findViewById<EditText>(R.id.editTextDescription)
+                val taskPriorityEditText = dialogView.findViewById<EditText>(R.id.editTextPriority)
+                val taskDueDateEditText = dialogView.findViewById<EditText>(R.id.editTextDueDate)
+                val taskCategoryEditText = dialogView.findViewById<EditText>(R.id.editTextCategory)
 
-            val newId = Math.random().toLong()
+                val taskTitle = taskTitleEditText.text.toString()
+                val taskDescription = taskDescriptionEditText.text.toString()
+                val priority = taskPriorityEditText.text.toString()
+                val dueDate = taskDueDateEditText.text.toString()
+                val category = taskCategoryEditText.text.toString()
 
-            val newTask = Task(newId, taskTitle, taskDescription, priority, dueDate, category)
-            taskList.add(newTask)
+                val newId = Math.random().toLong()
+                val newTask = Task(newId, taskTitle, taskDescription, priority, dueDate, category)
+                taskList.add(newTask)
 
-            binding.recyclerView.adapter?.notifyDataSetChanged()
+                binding.recyclerView.adapter?.notifyDataSetChanged()
 
-            windowManager.removeView(overlayLayout)
-        }
+
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, which ->
+
+                dialog.cancel()
+            }
+            .create()
+            .show()
     }
 
     private fun addTask(task: Task) {
