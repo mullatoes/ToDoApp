@@ -48,7 +48,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Contact
 
-If you have any questions or suggestions, please feel free to contact us at jaydevsengineer@email.com.
+If you have any questions or suggestions, please feel free to contact us at jaydevsengineer@gmail.com.
 
 ## Acknowledgements
 
