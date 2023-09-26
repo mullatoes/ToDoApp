@@ -58,7 +58,14 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
             "2023-09-25",
             "Personal"
         ),
-        Task(5, "Pay Bills", "Pay monthly utility bills.", "High", "2023-09-28", "Finance")
+        Task(
+            5,
+            "Pay Bills",
+            "Pay monthly utility bills.",
+            "High",
+            "2023-09-28",
+            "Finance"
+        )
     )
 
 
@@ -179,9 +186,8 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         val taskToRemove = taskList.find { it.id == taskId }
 
         if (taskToRemove != null) {
-            val position = taskList.indexOf(taskToRemove)
             taskList.remove(taskToRemove)
-            adapter.notifyItemRemoved(position)
+            binding.recyclerView.adapter?.notifyDataSetChanged()
         }
 
     }
