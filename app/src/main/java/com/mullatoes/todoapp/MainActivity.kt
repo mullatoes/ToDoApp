@@ -1,32 +1,19 @@
 package com.mullatoes.todoapp
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.graphics.Color
-import android.graphics.PixelFormat
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mullatoes.todoapp.databinding.ActivityMainBinding
 import com.mullatoes.todoapp.model.Task
 
 class MainActivity : AppCompatActivity(), TaskItemClickListener {
-
-    private lateinit var taskTitleEditText: EditText
-    private lateinit var taskDescriptionEditText: EditText
-    private lateinit var taskPriorityEditText: EditText
-    private lateinit var taskDueDateEditText: EditText
-    private lateinit var taskCategoryEditText: EditText
 
     private lateinit var binding: ActivityMainBinding
 
@@ -113,7 +100,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                 }
 
                 override fun onNothingSelected(p0: AdapterView<*>?) {
-                    // Do nothing if nothing is selected
+
                 }
 
             }
