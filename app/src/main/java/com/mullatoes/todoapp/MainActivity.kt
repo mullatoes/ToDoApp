@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mullatoes.todoapp.databinding.ActivityMainBinding
 import com.mullatoes.todoapp.model.Task
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), TaskItemClickListener {
 
     private lateinit var taskTitleEditText: EditText
     private lateinit var taskDescriptionEditText: EditText
@@ -69,12 +69,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        adapter = MyRecyclerAdapter(taskList)
+        adapter = MyRecyclerAdapter(taskList, this)
 
         binding.recyclerView.apply {
-            setBackgroundColor(Color.YELLOW)
             layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = MyRecyclerAdapter(taskList)
+            adapter = MyRecyclerAdapter(taskList, this@MainActivity)
         }
 
         binding.floatingActionButton.setOnClickListener {
@@ -141,6 +140,10 @@ class MainActivity : AppCompatActivity() {
                 val taskDueDateEditText = dialogView.findViewById<EditText>(R.id.editTextDueDate)
                 val taskCategoryEditText = dialogView.findViewById<EditText>(R.id.editTextCategory)
 
+                taskDueDateEditText.setOnClickListener {
+                    println("Clicked Due Date")
+                }
+
                 val taskTitle = taskTitleEditText.text.toString()
                 val taskDescription = taskDescriptionEditText.text.toString()
                 val priority = taskPriorityEditText.text.toString()
@@ -166,5 +169,20 @@ class MainActivity : AppCompatActivity() {
 
     private fun addTask(task: Task) {
         taskList.add(task)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onDeleteTaskClicked(taskId: Long) {
+
+        println("Task Id: $taskId")
+
+        val taskToRemove = taskList.find { it.id == taskId }
+
+        if (taskToRemove != null) {
+            val position = taskList.indexOf(taskToRemove)
+            taskList.remove(taskToRemove)
+            adapter.notifyItemRemoved(position)
+        }
+
     }
 }
